@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from app.routers import volunteer
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import gdacs
@@ -10,6 +12,15 @@ import os
 
 app = FastAPI()
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],  # Make sure PUT is allowed
+    allow_headers=["*"],
+)
+
 logger = logging.getLogger(__name__)
 # Configure logging
 logging.basicConfig(
@@ -19,39 +30,14 @@ logging.basicConfig(
 
 # Get the base directory and load .env
 BASE_DIR = Path(__file__).resolve().parent.parent
-logger.info(f"Base directory: {BASE_DIR}")
+
 env_path = BASE_DIR / ".env"
-logger.info(f"Looking for .env file at: {env_path}")
 load_dotenv(env_path)
 
-# Debug: Print environment variables
-logger.info(f"NEWS_API_KEY present: {'NEWS_API_KEY' in os.environ}")
-if 'NEWS_API_KEY' in os.environ:
-    logger.info(f"NEWS_API_KEY length: {len(os.environ['NEWS_API_KEY'])}")
-
-
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+app.include_router(volunteer.router, prefix="/api")
 app.include_router(gdacs.router)
 app.include_router(news.router)
-# @app.get("/")
-# async def root() -> Dict[str, str]:
-#     return {"message": "Hello World"}
 
-@app.get("/hello/{name}")
-async def say_hello(name: str) -> Dict[str, str]:
-    return {"message": f"Hello, {name}!"}
-
-@app.get("/health")
-async def health_check() -> Dict[str, str]:
-    return {"status": "healthy"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Volunteer Program API"}
