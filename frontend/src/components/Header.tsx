@@ -13,8 +13,8 @@ import { TbBellOff, TbBell } from "react-icons/tb";
 import { setAlert } from "../store/slices/userSlice";
 import { SignIn, SignUp } from "@clerk/clerk-react";
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
+  { name: "Home", href: "/", current: true },
+  { name: "Volunteer", href: "/volunteer", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
 ];

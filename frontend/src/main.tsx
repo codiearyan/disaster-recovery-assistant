@@ -5,9 +5,10 @@ import { store } from "./store/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
-import { Home } from "./pages";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { PUBLISHABLE_KEY } from "../constants.ts";
+import { VolunteerPage, Home } from "./pages";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -17,10 +18,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      // {
-      //   path: "/volunteer",
-      //   element: <Volunteer />,
-      // },
+      {
+        path: "/volunteer",
+        element: <VolunteerPage />,
+      },
     ],
   },
 ]);

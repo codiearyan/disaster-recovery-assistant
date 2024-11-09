@@ -1,3 +1,4 @@
 import Home from "./Home";
+import VolunteerPage from "./VolunteerPage";
 
-export { Home };
+export { Home, VolunteerPage };
