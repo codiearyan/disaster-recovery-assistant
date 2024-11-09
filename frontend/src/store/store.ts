@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import gdacsSlice from "./slices/gdacsSlice";
+import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {
     gdacs: gdacsSlice,
+    user: userSlice,
   },
 });
 
