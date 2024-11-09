@@ -1271,16 +1271,18 @@ const MultiGeometryMap = () => {
   }, []);
 
   return (
-    <div className='w-full flex justify-between'>
-        <div ><h1>News</h1></div>
+    <div className='w-full flex '>
+        <div className='w-[20%]'><h1>News</h1></div>
+     
     <div 
       id="map" 
       ref={mapContainerRef} 
       style={{ 
         height: '500px',
-        width: '50%',
+        width: '80%',
         position: 'relative'
       }} 
+      className='rounded-lg'
     />
     </div>
   );
