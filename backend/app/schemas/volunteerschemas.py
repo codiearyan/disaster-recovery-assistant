@@ -57,3 +57,12 @@ class VolunteerMemberResponse(VolunteerMemberBase):
 
     class Config:
         from_attributes = True
+
+class SubscriptionCreate(BaseModel):
+    name: str
+    email: EmailStr
+    phone_number: str
+    disaster_events: str
+    location_type: str  # "Your Location" or "Countries"
+    location: str  # Actual location value
+    status: str = "pending"  # Default status changed to pending
