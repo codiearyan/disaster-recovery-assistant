@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from app.schemas.volunteerschemas import (
     VolunteerProgramCreate,
     VolunteerProgramResponse,
@@ -12,6 +13,7 @@ import uuid
 from datetime import datetime
 from typing import List
 import logging
+import pycountry
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
@@ -398,3 +400,45 @@ async def delete_member(program_id: str, member_id: str):
     except Exception as e:
         logger.error(f"Unexpected error in delete_member endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+class CountryResponse(BaseModel):
+    name: str
+
+@router.get("/countries", response_model=List[CountryResponse])
+async def get_countries():
+    """
+    Get list of all country names using pycountry
+    """
+    try:
+        logger.info("Fetching list of countries")
+        countries = [{"name": country.name} for country in pycountry.countries]
+        # Sort countries alphabetically
+        countries.sort(key=lambda x: x["name"])
+        return countries
+    except Exception as e:
+        logger.error(f"Error fetching countries: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@router.get("/countries/search")
+async def search_countries(query: str = ""):
+    """
+    Search countries by name
+    """
+    try:
+        logger.info(f"Searching countries with query: {query}")
+        if not query:
+            countries = [{"name": country.name} for country in pycountry.countries]
+            countries.sort(key=lambda x: x["name"])
+            return countries
+        
+        # Filter countries based on search query
+        filtered_countries = [
+            {"name": country.name}
+            for country in pycountry.countries
+            if query.lower() in country.name.lower()
+        ]
+        filtered_countries.sort(key=lambda x: x["name"])
+        return filtered_countries
+    except Exception as e:
+        logger.error(f"Error searching countries: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
