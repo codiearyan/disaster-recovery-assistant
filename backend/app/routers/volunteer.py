@@ -455,7 +455,6 @@ def create_subscription(subscription: SubscriptionCreate):
         # Add additional fields
         subscription_data["id"] = subscription_id
         subscription_data["created_at"] = datetime.utcnow().isoformat()
-        subscription_data["status"] = "pending"  # Set initial status to pending
         
         # Store in Firestore
         db.collection("subscriptions").document(subscription_id).set(subscription_data)
@@ -473,10 +472,7 @@ async def subscribe(subscription: SubscriptionCreate):
         result = create_subscription(subscription)
         return {
             "message": "Subscription created successfully",
-            "data": {
-                **result,
-                "status": "Pending"  # Status only in the data object
-            }
+            "data": result
         }
     except HTTPException as he:
         logger.error(f"HTTP Exception in subscribe: {he.detail}")
