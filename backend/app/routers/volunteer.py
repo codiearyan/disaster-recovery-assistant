@@ -153,6 +153,77 @@ def get_program_by_id(program_id: str):
         logger.error(f"Error fetching program: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
+# Add this new function with your existing CRUD operations
+def delete_program_by_id(program_id: str):
+    try:
+        # Check if program exists
+        program_ref = db.collection("volunteer_programs").document(program_id).get()
+        if not program_ref.exists:
+            raise HTTPException(status_code=404, detail="Program not found")
+        
+        # Delete all members in the subcollection first
+        members_ref = db.collection("volunteer_programs")\
+                       .document(program_id)\
+                       .collection("members")\
+                       .stream()
+        
+        # Delete each member document
+        for member in members_ref:
+            member.reference.delete()
+        
+        # Delete the program document
+        db.collection("volunteer_programs").document(program_id).delete()
+        
+        logger.info(f"Program with ID {program_id} deleted successfully")
+        return {"message": f"Program with ID {program_id} deleted successfully"}
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logger.error(f"Error deleting program: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+# Add this new function with your existing CRUD operations
+def update_program_by_id(program_id: str, program_update: VolunteerProgramCreate):
+    try:
+        # Log the attempt
+        logger.info(f"Attempting to update program with ID: {program_id}")
+        
+        # Check if program exists
+        program_ref = db.collection("volunteer_programs").document(program_id).get()
+        if not program_ref.exists:
+            logger.error(f"Program with ID {program_id} not found")
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Program with ID {program_id} not found in database"
+            )
+        
+        # Get existing program data
+        existing_program = program_ref.to_dict()
+        logger.info(f"Found existing program: {existing_program}")
+        
+        # Prepare update data
+        update_data = program_update.model_dump()
+        
+        # Convert datetime to string for Firestore
+        if isinstance(update_data["event_date"], datetime):
+            update_data["event_date"] = update_data["event_date"].isoformat()
+        
+        # Preserve the original id and created_at
+        update_data["id"] = program_id
+        update_data["created_at"] = existing_program.get("created_at")
+        
+        logger.info(f"Updating program with data: {update_data}")
+        
+        # Update the program document
+        db.collection("volunteer_programs").document(program_id).set(update_data)
+        
+        return update_data
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logger.error(f"Error updating program: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Route Handlers
 @router.post("/programs", response_model=VolunteerProgramResponse)
 async def create_program(program: VolunteerProgramCreate):
@@ -233,7 +304,7 @@ async def list_program_members(program_id: str):
         logger.error(f"Error listing members: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-@router.get("/programs/{program_id}", response_model=VolunteerProgramResponse)
+@router.get("/programs/{program_id}/get", response_model=VolunteerProgramResponse)
 async def get_program(program_id: str):
     try:
         logger.info(f"Fetching program with ID: {program_id}")
@@ -245,3 +316,40 @@ async def get_program(program_id: str):
     except Exception as e:
         logger.error(f"Unexpected error in get_program endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@router.put("/programs/{program_id}/update", response_model=VolunteerProgramResponse)
+async def update_program(program_id: str, program: VolunteerProgramCreate):
+    try:
+        # First verify program exists
+        program_ref = db.collection("volunteer_programs").document(program_id).get()
+        if not program_ref.exists:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Program with ID {program_id} not found"
+            )
+            
+        logger.info(f"Received update request for program ID: {program_id}")
+        logger.info(f"Update data: {program.model_dump()}")
+        
+        result = update_program_by_id(program_id, program)
+        logger.info(f"Program updated successfully: {result}")
+        return result
+    except HTTPException as he:
+        logger.error(f"HTTP Exception in update_program: {he.detail}")
+        raise he
+    except Exception as e:
+        logger.error(f"Unexpected error in update_program endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/programs/{program_id}/delete")
+async def delete_program(program_id: str):
+    try:
+        logger.info(f"Attempting to delete program with ID: {program_id}")
+        result = delete_program_by_id(program_id)
+        return result
+    except HTTPException as he:
+        logger.error(f"HTTP Exception in delete_program: {he.detail}")
+        raise he
+    except Exception as e:
+        logger.error(f"Unexpected error in delete_program endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

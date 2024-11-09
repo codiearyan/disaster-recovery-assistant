@@ -1,10 +1,20 @@
 from fastapi import FastAPI
-from app.routers.volunteer import router as volunteer_router
+from app.routers import volunteer
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Register the volunteer router
-app.include_router(volunteer_router, prefix="/api", tags=["Volunteer Programs"])
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],  # Make sure PUT is allowed
+    allow_headers=["*"],
+)
+
+# Include the router with a prefix
+app.include_router(volunteer.router, prefix="/api")
 
 @app.get("/")
 def read_root():
