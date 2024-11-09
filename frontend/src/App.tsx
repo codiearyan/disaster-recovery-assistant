@@ -10,10 +10,10 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Outlet />
       <Header />
-      <Footer />
       <Outlet />
+      <Footer />
+    
     </ThemeProvider>
   );
 }
