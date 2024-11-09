@@ -65,4 +65,3 @@ class SubscriptionCreate(BaseModel):
     disaster_events: str
     location_type: str  # "Your Location" or "Countries"
     location: str  # Actual location value
-    status: str = "pending"  # Default status changed to pending
