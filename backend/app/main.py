@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from typing import Dict
+from fastapi.middleware.cors import CORSMiddleware
 from .routers import gdacs
 import logging
 
@@ -12,6 +13,13 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(gdacs.router)
 
