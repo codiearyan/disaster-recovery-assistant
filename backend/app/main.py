@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from typing import Dict
+from .routers import gdacs
 
-from .volunteer import router as volunteer_router
 app = FastAPI()
 
-app.include_router(volunteer_router)
+app.include_router(gdacs.router)
 
 # @app.get("/")
 # async def root() -> Dict[str, str]:
