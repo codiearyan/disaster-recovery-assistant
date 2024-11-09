@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/gdacs", tags=["GDACS"])
 
+
 @router.get("/events")
 async def get_events(
     limit: Optional[int] = Query(None, description="Limit the number of events returned"),
