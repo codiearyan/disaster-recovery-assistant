@@ -353,3 +353,48 @@ async def delete_program(program_id: str):
     except Exception as e:
         logger.error(f"Unexpected error in delete_program endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+def delete_program_member(program_id: str, member_id: str):
+    try:
+        logger.info(f"Checking program existence for ID: {program_id}")
+        # Check if program exists
+        program_ref = db.collection("volunteer_programs").document(program_id).get()
+        if not program_ref.exists:
+            logger.error(f"Program with ID {program_id} not found")
+            raise HTTPException(status_code=404, detail=f"Program with ID {program_id} not found")
+            
+        logger.info(f"Checking member existence for ID: {member_id}")
+        # Check if member exists
+        member_ref = db.collection("volunteer_programs")\
+                      .document(program_id)\
+                      .collection("members")\
+                      .document(member_id)
+                      
+        member = member_ref.get()
+        if not member.exists:
+            logger.error(f"Member with ID {member_id} not found in program {program_id}")
+            raise HTTPException(status_code=404, detail=f"Member with ID {member_id} not found")
+            
+        # Delete the member
+        member_ref.delete()
+        
+        logger.info(f"Member {member_id} successfully deleted from program {program_id}")
+        return {"message": f"Member successfully deleted"}
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logger.error(f"Error deleting member: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+@router.delete("/programs/{program_id}/members/{member_id}")
+async def delete_member(program_id: str, member_id: str):
+    try:
+        logger.info(f"Received delete request for member {member_id} in program {program_id}")
+        result = delete_program_member(program_id, member_id)
+        return result
+    except HTTPException as he:
+        logger.error(f"HTTP Exception in delete_member: {he.detail}")
+        raise he
+    except Exception as e:
+        logger.error(f"Unexpected error in delete_member endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
