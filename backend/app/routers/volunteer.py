@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException # type: ignore
 from pydantic import BaseModel
 from app.schemas.volunteerschemas import (
     VolunteerProgramCreate,
@@ -6,14 +6,15 @@ from app.schemas.volunteerschemas import (
     VolunteerParticipationCreate,
     VolunteerParticipationResponse,
     VolunteerMemberCreate,
-    VolunteerMemberResponse
+    VolunteerMemberResponse,
+    SubscriptionCreate
 )
 from app.firebase_config import db
 import uuid
 from datetime import datetime
 from typing import List
 import logging
-import pycountry
+import pycountry # type: ignore
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
@@ -442,3 +443,44 @@ async def search_countries(query: str = ""):
     except Exception as e:
         logger.error(f"Error searching countries: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+# Add this function with your existing CRUD operations
+def create_subscription(subscription: SubscriptionCreate):
+    try:
+        logger.info(f"Creating subscription with data: {subscription.model_dump()}")
+        
+        subscription_id = str(uuid.uuid4())
+        subscription_data = subscription.model_dump()
+        
+        # Add additional fields
+        subscription_data["id"] = subscription_id
+        subscription_data["created_at"] = datetime.utcnow().isoformat()
+        subscription_data["status"] = "pending"  # Set initial status to pending
+        
+        # Store in Firestore
+        db.collection("subscriptions").document(subscription_id).set(subscription_data)
+        
+        return subscription_data
+    except Exception as e:
+        logger.error(f"Error creating subscription: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Update the subscribe endpoint
+@router.post("/subscribe", response_model=dict)
+async def subscribe(subscription: SubscriptionCreate):
+    try:
+        logger.info("Received subscription request")
+        result = create_subscription(subscription)
+        return {
+            "message": "Subscription created successfully",
+            "data": {
+                **result,
+                "status": "Pending"  # Status only in the data object
+            }
+        }
+    except HTTPException as he:
+        logger.error(f"HTTP Exception in subscribe: {he.detail}")
+        raise he
+    except Exception as e:
+        logger.error(f"Unexpected error in subscribe endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
