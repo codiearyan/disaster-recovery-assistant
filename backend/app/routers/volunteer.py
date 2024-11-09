@@ -7,7 +7,8 @@ from app.schemas.volunteerschemas import (
     VolunteerParticipationResponse,
     VolunteerMemberCreate,
     VolunteerMemberResponse,
-    SubscriptionCreate
+    SubscriptionCreate,
+    VolunteerAuth
 )
 from app.firebase_config import db
 import uuid
@@ -15,6 +16,7 @@ from datetime import datetime
 from typing import List
 import logging
 import pycountry # type: ignore
+from app.config.email_config import send_disaster_alert
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +25,13 @@ logger = logging.getLogger(__name__)
 # CRUD Operations
 def create_volunteer_program(program: VolunteerProgramCreate):
     try:
+        # Check if volunteer exists
+        if not check_volunteer_exists(program.email):
+            raise HTTPException(
+                status_code=401, 
+                detail="Please register as a volunteer before creating a program"
+            )
+        
         # Log the incoming data
         logger.info(f"Attempting to create program with data: {program.model_dump()}")
         
@@ -479,4 +488,88 @@ async def subscribe(subscription: SubscriptionCreate):
         raise he
     except Exception as e:
         logger.error(f"Unexpected error in subscribe endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+def check_volunteer_exists(email: str) -> bool:
+    try:
+        volunteer_ref = db.collection("volunteers").where("email", "==", email).limit(1).stream()
+        return any(volunteer.exists for volunteer in volunteer_ref)
+    except Exception as e:
+        logger.error(f"Error checking volunteer existence: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+def register_volunteer(volunteer: VolunteerAuth):
+    try:
+        if check_volunteer_exists(volunteer.email):
+            raise HTTPException(status_code=400, detail="Volunteer already exists")
+        
+        volunteer_id = str(uuid.uuid4())
+        volunteer_data = volunteer.model_dump()
+        volunteer_data["id"] = volunteer_id
+        volunteer_data["created_at"] = datetime.utcnow().isoformat()
+        
+        db.collection("volunteers").document(volunteer_id).set(volunteer_data)
+        return volunteer_data
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logger.error(f"Error registering volunteer: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/volunteers/register", response_model=dict)
+async def register_new_volunteer(volunteer: VolunteerAuth):
+    try:
+        result = register_volunteer(volunteer)
+        return {
+            "message": "Volunteer registered successfully",
+            "data": result
+        }
+    except HTTPException as he:
+        logger.error(f"HTTP Exception in register_volunteer: {he.detail}")
+        raise he
+    except Exception as e:
+        logger.error(f"Unexpected error in register_volunteer endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/volunteers/check/{email}")
+async def check_volunteer(email: str):
+    try:
+        exists = check_volunteer_exists(email)
+        return {
+            "exists": exists,
+            "message": "Volunteer found" if exists else "Volunteer not found"
+        }
+    except Exception as e:
+        logger.error(f"Error checking volunteer: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def notify_subscribers_of_disaster(disaster_info: dict):
+    try:
+        # Get all subscribers
+        subscribers_ref = db.collection("subscriptions").stream()
+        subscribers = [doc.to_dict() for doc in subscribers_ref]
+        
+        # Filter subscribers based on location and disaster type preferences
+        relevant_subscribers = [
+            sub for sub in subscribers
+            if (disaster_info['disaster_type'] in sub['disaster_events'] and
+                (sub['location_type'] == "Countries" and disaster_info['location'] == sub['location']) or
+                sub['location_type'] == "Your Location")
+        ]
+        
+        if relevant_subscribers:
+            await send_disaster_alert(relevant_subscribers, disaster_info)
+            
+        return {"message": f"Alert sent to {len(relevant_subscribers)} subscribers"}
+    except Exception as e:
+        logger.error(f"Error sending disaster alerts: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/disaster-alert")
+async def create_disaster_alert(disaster_info: dict):
+    try:
+        result = await notify_subscribers_of_disaster(disaster_info)
+        return result
+    except Exception as e:
+        logger.error(f"Error in disaster alert endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
