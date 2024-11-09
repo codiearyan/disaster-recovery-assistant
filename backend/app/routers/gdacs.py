@@ -70,16 +70,16 @@ async def get_events(
     
 @router.get("/getgeometry")
 async def get_geometry(
-    eventtype: str = Query(..., description="Event type (e.g., EQ, TC)"),
-    eventid: int = Query(..., description="Event ID"),
-    episodeid: int = Query(..., description="Episode ID")
+    event_type: str = Query(..., description="Event type (e.g., EQ, TC)"),
+    event_id: int = Query(..., description="Event ID"),
+    episode_id: int = Query(..., description="Episode ID")
 ) -> Dict[str, Any]:
     """Get geometry coordinates for a specific event"""
     try:
         # Construct the geometry URL
         geometry_url = (
             f"https://www.gdacs.org/gdacsapi/api/polygons/getgeometry"
-            f"?eventtype={eventtype}&eventid={eventid}&episodeid={episodeid}"
+            f"?eventtype={event_type}&eventid={event_id}&episodeid={episode_id}"
         )
         
         async with httpx.AsyncClient() as client:
