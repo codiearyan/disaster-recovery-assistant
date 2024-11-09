@@ -1,3 +1,4 @@
 /venv/
 /db.sqlite3
 firebase_service.json
+/app/__pycache__/
