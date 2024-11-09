@@ -1,8 +1,17 @@
 from fastapi import FastAPI
 from typing import Dict
 from .routers import gdacs
+import logging
 
 app = FastAPI()
+
+logger = logging.getLogger(__name__)
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
 
 app.include_router(gdacs.router)
 
