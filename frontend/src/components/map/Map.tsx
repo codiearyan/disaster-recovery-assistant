@@ -403,315 +403,864 @@
 // export default MapboxExample;
 
 
-import React, { useEffect, useRef, useState } from 'react';
+
+// ____________Polygon_______________
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import mapboxgl from 'mapbox-gl';
+// import 'mapbox-gl/dist/mapbox-gl.css';
+
+// const MapboxCycloneTracker = () => {
+//   const mapContainerRef = useRef(null);
+//   const mapRef = useRef(null);
+//   const popupRef = useRef(null);
+//   const [error, setError] = useState(null);
+
+//   const cycloneData = {
+//     type: "FeatureCollection",  // Changed to FeatureCollection
+//     features: [
+//       {
+//         type: "Feature",  // Added type: "Feature" to each feature
+//         properties: {
+//           eventtype: "TC",
+//           eventid: 1001123,
+//           eventname: "VAYU-24",
+//           name: "Tropical Cyclone VAYU-24",
+//           alertlevel: "Red",
+//           country: "India",
+//           fromdate: "2024-11-05T06:00:00",
+//           todate: "2024-11-10T12:00:00",
+//           severitydata: JSON.stringify({
+//             severity: 180.23,
+//             severitytext: "Severe Cyclonic Storm (maximum wind speed of 180 km/h)",
+//             severityunit: "km/h"
+//           })
+//         },
+//         geometry: {
+//           type: "Polygon",
+//           "coordinates": [
+//           [
+//             [-174.38, -19.786],
+//             [-174.381, -19.755],
+//             [-174.382, -19.723],
+//             [-174.385, -19.692],
+//             [-174.389, -19.661],
+//             [-174.395, -19.63],
+//             [-174.401, -19.599],
+//             [-174.409, -19.568],
+//             [-174.417, -19.538],
+//             [-174.427, -19.508],
+//             [-174.438, -19.478],
+//             [-174.45, -19.449],
+//             [-174.463, -19.42],
+//             [-174.477, -19.391],
+//             [-174.492, -19.363],
+//             [-174.508, -19.336],
+//             [-174.526, -19.309],
+//             [-174.544, -19.282],
+//             [-174.563, -19.256],
+//             [-174.583, -19.231],
+//             [-174.604, -19.207],
+//             [-174.626, -19.183],
+//             [-174.649, -19.16],
+//             [-174.672, -19.138],
+//             [-174.697, -19.117],
+//             [-174.722, -19.096],
+//             [-174.748, -19.076],
+//             [-174.775, -19.057],
+//             [-174.802, -19.039],
+//             [-174.83, -19.022],
+//             [-174.859, -19.006],
+//             [-174.888, -18.991],
+//             [-174.918, -18.976],
+//             [-174.948, -18.963],
+//             [-174.979, -18.951],
+//             [-175.01, -18.939],
+//             [-175.042, -18.929],
+//             [-175.074, -18.92],
+//             [-175.106, -18.912],
+//             [-175.138, -18.905],
+//             [-175.171, -18.899],
+//             [-175.204, -18.894],
+//             [-175.237, -18.89],
+//             [-175.271, -18.887],
+//             [-175.304, -18.886],
+//             [-175.338, -18.885],
+//             [-175.371, -18.886],
+//             [-175.404, -18.887],
+//             [-175.438, -18.89],
+//             [-175.471, -18.894],
+//             [-175.504, -18.899],
+//             [-175.537, -18.905],
+//             [-175.569, -18.912],
+//             [-175.601, -18.92],
+//             [-175.633, -18.929],
+//             [-175.665, -18.939],
+//             [-175.696, -18.951],
+//             [-175.727, -18.963],
+//             [-175.757, -18.976],
+//             [-175.787, -18.991],
+//             [-175.816, -19.006],
+//             [-175.845, -19.022],
+//             [-175.873, -19.039],
+//             [-175.9, -19.057],
+//             [-175.927, -19.076],
+//             [-175.953, -19.096],
+//             [-175.978, -19.117],
+//             [-176.003, -19.138],
+//             [-176.026, -19.16],
+//             [-176.049, -19.183],
+//             [-176.071, -19.207],
+//             [-176.092, -19.231],
+//             [-176.112, -19.256],
+//             [-176.131, -19.282],
+//             [-176.149, -19.309],
+//             [-176.167, -19.336],
+//             [-176.183, -19.363],
+//             [-176.198, -19.391],
+//             [-176.212, -19.42],
+//             [-176.225, -19.449],
+//             [-176.237, -19.478],
+//             [-176.248, -19.508],
+//             [-176.258, -19.538],
+//             [-176.266, -19.568],
+//             [-176.274, -19.599],
+//             [-176.28, -19.63],
+//             [-176.286, -19.661],
+//             [-176.29, -19.692],
+//             [-176.293, -19.723],
+//             [-176.294, -19.755],
+//             [-176.295, -19.786],
+//             [-176.294, -19.817],
+//             [-176.293, -19.849],
+//             [-176.29, -19.88],
+//             [-176.286, -19.911],
+//             [-176.28, -19.942],
+//             [-176.274, -19.973],
+//             [-176.266, -20.004],
+//             [-176.258, -20.034],
+//             [-176.248, -20.064],
+//             [-176.237, -20.094],
+//             [-176.225, -20.123],
+//             [-176.212, -20.152],
+//             [-176.198, -20.181],
+//             [-176.183, -20.209],
+//             [-176.167, -20.236],
+//             [-176.149, -20.263],
+//             [-176.131, -20.29],
+//             [-176.112, -20.316],
+//             [-176.092, -20.341],
+//             [-176.071, -20.365],
+//             [-176.049, -20.389],
+//             [-176.026, -20.412],
+//             [-176.003, -20.434],
+//             [-175.978, -20.455],
+//             [-175.953, -20.476],
+//             [-175.927, -20.496],
+//             [-175.9, -20.515],
+//             [-175.873, -20.533],
+//             [-175.845, -20.55],
+//             [-175.816, -20.566],
+//             [-175.787, -20.581],
+//             [-175.757, -20.596],
+//             [-175.727, -20.609],
+//             [-175.696, -20.621],
+//             [-175.665, -20.633],
+//             [-175.633, -20.643],
+//             [-175.601, -20.652],
+//             [-175.569, -20.66],
+//             [-175.537, -20.667],
+//             [-175.504, -20.673],
+//             [-175.471, -20.678],
+//             [-175.438, -20.682],
+//             [-175.404, -20.685],
+//             [-175.371, -20.686],
+//             [-175.338, -20.687],
+//             [-175.304, -20.686],
+//             [-175.271, -20.685],
+//             [-175.237, -20.682],
+//             [-175.204, -20.678],
+//             [-175.171, -20.673],
+//             [-175.138, -20.667],
+//             [-175.106, -20.66],
+//             [-175.074, -20.652],
+//             [-175.042, -20.643],
+//             [-175.01, -20.633],
+//             [-174.979, -20.621],
+//             [-174.948, -20.609],
+//             [-174.918, -20.596],
+//             [-174.888, -20.581],
+//             [-174.859, -20.566],
+//             [-174.83, -20.55],
+//             [-174.802, -20.533],
+//             [-174.775, -20.515],
+//             [-174.748, -20.496],
+//             [-174.722, -20.476],
+//             [-174.697, -20.455],
+//             [-174.672, -20.434],
+//             [-174.649, -20.412],
+//             [-174.626, -20.389],
+//             [-174.604, -20.365],
+//             [-174.583, -20.341],
+//             [-174.563, -20.316],
+//             [-174.544, -20.29],
+//             [-174.526, -20.263],
+//             [-174.508, -20.236],
+//             [-174.492, -20.209],
+//             [-174.477, -20.181],
+//             [-174.463, -20.152],
+//             [-174.45, -20.123],
+//             [-174.438, -20.094],
+//             [-174.427, -20.064],
+//             [-174.417, -20.034],
+//             [-174.409, -20.004],
+//             [-174.401, -19.973],
+//             [-174.395, -19.942],
+//             [-174.389, -19.911],
+//             [-174.385, -19.88],
+//             [-174.382, -19.849],
+//             [-174.381, -19.817],
+//             [-174.38, -19.786]
+//           ]
+//           ]
+//         }
+//       },
+//     ]
+//   };
+
+//   useEffect(() => {
+//     try {
+//       if (!mapRef.current) {
+//         console.log('Initializing map...');
+//         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+
+//         mapRef.current = new mapboxgl.Map({
+//           container: mapContainerRef.current,
+//           style: 'mapbox://styles/mapbox/streets-v12',
+//           center: [83, 21], // Centered on India
+//           zoom: 4.5 // Adjusted zoom level to show all of India
+//         });
+
+//         // Create popup but don't add to map yet
+//         popupRef.current = new mapboxgl.Popup({
+//           closeButton: true,
+//           closeOnClick: false
+//         });
+
+//         // Wait for map to load before adding data
+//         mapRef.current.on('load', () => {
+//           console.log('Map loaded, adding source and layers...');
+
+//           // First check if source already exists
+//           if (!mapRef.current.getSource('cyclone')) {
+//             // Add the cyclone data source
+//             mapRef.current.addSource('cyclone', {
+//               type: 'geojson',
+//               data: cycloneData
+//             });
+//             console.log('Source added');
+//           }
+
+//           // Check if layer exists before adding
+//           if (!mapRef.current.getLayer('cyclone-area')) {
+//             // Add the fill layer with color based on alert level
+//             mapRef.current.addLayer({
+//               id: 'cyclone-area',
+//               type: 'fill',
+//               source: 'cyclone',
+//               paint: {
+//                 'fill-color': [
+//                   'match',
+//                   ['get', 'alertlevel'],
+//                   'Red', '#FF0000',
+//                   'Orange', '#FFA500',
+//                   'Yellow', '#FFFF00',
+//                   '#FFA500' // default color
+//                 ],
+//                 'fill-opacity': 0.5
+//               }
+//             });
+//             console.log('Fill layer added');
+
+//             // Add the outline layer
+//             mapRef.current.addLayer({
+//               id: 'cyclone-outline',
+//               type: 'line',
+//               source: 'cyclone',
+//               paint: {
+//                 'line-color': '#000',
+//                 'line-width': 2
+//               }
+//             });
+//             console.log('Outline layer added');
+//           }
+
+//           // Add click handler
+//           mapRef.current.on('click', 'cyclone-area', (e) => {
+//             const coordinates = e.lngLat;
+//             const properties = e.features[0].properties;
+//             const severityData = JSON.parse(properties.severitydata);
+
+//             const html = `
+//               <div class="p-4 max-w-sm">
+//                 <h3 class="text-lg font-bold mb-2">${properties.name}</h3>
+//                 <div class="space-y-2">
+//                   <p><strong>Alert Level:</strong> ${properties.alertlevel}</p>
+//                   <p><strong>Location:</strong> ${properties.country}</p>
+//                   <p><strong>Period:</strong><br/>
+//                      From: ${new Date(properties.fromdate).toLocaleString()}<br/>
+//                      To: ${new Date(properties.todate).toLocaleString()}</p>
+//                   <p><strong>Severity:</strong> ${severityData.severitytext}</p>
+//                 </div>
+//               </div>
+//             `;
+
+//             popupRef.current
+//               .setLngLat(coordinates)
+//               .setHTML(html)
+//               .addTo(mapRef.current);
+//           });
+
+//           // Add hover effects
+//           mapRef.current.on('mouseenter', 'cyclone-area', () => {
+//             mapRef.current.getCanvas().style.cursor = 'pointer';
+//           });
+
+//           mapRef.current.on('mouseleave', 'cyclone-area', () => {
+//             mapRef.current.getCanvas().style.cursor = '';
+//           });
+//         });
+
+//         // Add error handling
+//         mapRef.current.on('error', (e) => {
+//           console.error('Mapbox error:', e);
+//           setError('An error occurred while loading the map.');
+//         });
+//       }
+//     } catch (err) {
+//       console.error('Error initializing map:', err);
+//       setError('Failed to initialize the map.');
+//     }
+
+//     return () => {
+//       if (mapRef.current) {
+//         mapRef.current.remove();
+//         mapRef.current = null;
+//       }
+//     };
+//   }, []);
+
+//   const containerStyle = {
+//     position: 'relative',
+//     width: '100%',
+//     height: '600px',
+//     border: '1px solid #ccc'
+//   };
+
+//   return (
+//     <div className="w-full">
+//       {error && (
+//         <div className="p-4 mb-4 bg-red-100 border border-red-400 text-red-700 rounded">
+//           {error}
+//         </div>
+//       )}
+//       <div 
+//         ref={mapContainerRef} 
+//         style={containerStyle}
+//         className="relative bg-gray-100"
+//       />
+//     </div>
+//   );
+// };
+
+// export default MapboxCycloneTracker;
+
+
+
+
+// ______________MUlti Polygon_______________
+
+// import React, { useEffect, useRef } from 'react';
+// import mapboxgl from 'mapbox-gl';
+
+// import 'mapbox-gl/dist/mapbox-gl.css';
+
+// const droughtData = {
+//   "type": "FeatureCollection",
+//   "features": [
+//     {
+//       "type": "Feature",
+//       "bbox": [29, 6, 34, 12],
+//       "geometry": {
+//         "type": "MultiPolygon",
+//         "coordinates": [[
+//           [
+//             [32, 11],
+//             [31, 11],
+//             [31, 12],
+//             [30, 12],
+//             [30, 11],
+//             [29, 11],
+//             [29, 10],
+//             [29, 9.668],
+//             [29, 9],
+//             [30, 9],
+//             [30, 8],
+//             [31, 8],
+//             [31, 9],
+//             [31, 9.749],
+//             [31, 10],
+//             [31.509, 10],
+//             [32, 10],
+//             [32, 10.656],
+//             [32, 11]
+//           ]
+//         ],
+//         [
+//           [
+//             [33, 8],
+//             [32, 8],
+//             [32, 7],
+//             [33, 7],
+//             [33, 7.936],
+//             [33, 7.937],
+//             [33, 8]
+//           ]
+//         ],
+//         [
+//           [
+//             [34, 7],
+//             [33, 7],
+//             [33, 6],
+//             [34, 6],
+//             [34, 7]
+//           ]
+//         ]]
+//       },
+//       "properties": {
+//         "eventtype": "DR",
+//         "name": "Drought in Ethiopia, Sudan, South Sudan",
+//         "alertlevel": "Green",
+//         "country": "Ethiopia, Sudan, South Sudan"
+//       }
+//     }
+//   ]
+// };
+
+// const MapboxExample = () => {
+//   const mapContainerRef = useRef(null);
+//   const mapRef = useRef(null);
+//   const popupRef = useRef(null);
+
+//   useEffect(() => {
+//     if (!mapboxgl.accessToken) {
+//       mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+//     }
+
+//     if (!mapboxgl.accessToken) {
+//       console.error('Mapbox access token is missing!');
+//       return;
+//     }
+
+//     if (mapRef.current) return;
+
+//     // Initialize the map centered on the polygon area
+//     mapRef.current = new mapboxgl.Map({
+//       container: mapContainerRef.current,
+//       style: 'mapbox://styles/mapbox/streets-v12',
+//       center: [31.5, 9], // Center on Sudan region
+//       zoom: 5
+//     });
+
+//     mapRef.current.on('load', () => {
+//       console.log('Adding drought data source...');
+      
+//       // Add the drought data source
+//       mapRef.current.addSource('drought-data', {
+//         type: 'geojson',
+//         data: droughtData
+//       });
+
+//       // Add fill layer for MultiPolygon
+//       mapRef.current.addLayer({
+//         id: 'drought-areas',
+//         type: 'fill',
+//         source: 'drought-data',
+//         paint: {
+//           'fill-color': '#4CAF50',
+//           'fill-opacity': 0.3
+//         }
+//       });
+
+//       // Add outline layer for MultiPolygon
+//       mapRef.current.addLayer({
+//         id: 'drought-outline',
+//         type: 'line',
+//         source: 'drought-data',
+//         paint: {
+//           'line-color': '#2E7D32',
+//           'line-width': 2
+//         }
+//       });
+
+//       // Add click events for polygon features
+//       mapRef.current.on('click', 'drought-areas', (e) => {
+//         if (!e.features[0].properties) return;
+
+//         const coordinates = e.lngLat;
+//         const properties = e.features[0].properties;
+
+//         const popupContent = `
+//           <div class="drought-popup">
+//             <h3>${properties.name}</h3>
+//             <p><strong>Alert Level:</strong> ${properties.alertlevel}</p>
+//             <p><strong>Countries:</strong> ${properties.country}</p>
+//           </div>
+//         `;
+
+//         if (!popupRef.current) {
+//           popupRef.current = new mapboxgl.Popup({
+//             closeButton: true,
+//             closeOnClick: false
+//           });
+//         }
+
+//         popupRef.current
+//           .setLngLat(coordinates)
+//           .setHTML(popupContent)
+//           .addTo(mapRef.current);
+//       });
+
+//       // Change cursor on hover
+//       mapRef.current.on('mouseenter', 'drought-areas', () => {
+//         mapRef.current.getCanvas().style.cursor = 'pointer';
+//       });
+
+//       mapRef.current.on('mouseleave', 'drought-areas', () => {
+//         mapRef.current.getCanvas().style.cursor = '';
+//       });
+
+//       // Add navigation control
+//       mapRef.current.addControl(new mapboxgl.NavigationControl());
+//     });
+
+//     return () => {
+//       if (mapRef.current) {
+//         mapRef.current.remove();
+//         mapRef.current = null;
+//       }
+//     };
+//   }, []);
+
+//   return (
+//     <div 
+//       id="map" 
+//       ref={mapContainerRef} 
+//       style={{ 
+//         height: '100vh',
+//         width: '100%',
+//         position: 'relative'
+//       }} 
+//     />
+//   );
+// };
+
+// export default MapboxExample;
+
+// ______________Multiple Geometry types_______________
+
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MapboxCycloneTracker = () => {
+// Dummy data with separated locations
+const geographicData = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      // Point feature - Khartoum, Sudan
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [32.5355, 15.5915]
+      },
+      "properties": {
+        "name": "Khartoum Monitoring Station",
+        "type": "monitoring_point",
+        "severity": "high",
+        "description": "Central monitoring station for climate data"
+      }
+    },
+    {
+      // Another Point - Port Sudan
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.2164, 19.6158]
+      },
+      "properties": {
+        "name": "Port Sudan Station",
+        "type": "monitoring_point",
+        "severity": "medium",
+        "description": "Coastal monitoring station"
+      }
+    },
+    {
+      // Polygon feature - Darfur Region
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [23.5000, 12.5000],
+          [23.5000, 14.5000],
+          [25.5000, 14.5000],
+          [25.5000, 12.5000],
+          [23.5000, 12.5000]
+        ]]
+      },
+      "properties": {
+        "name": "Darfur Agricultural Zone",
+        "type": "agricultural_zone",
+        "severity": "medium",
+        "description": "Agricultural monitoring region in Darfur"
+      }
+    },
+    {
+      // Another Polygon - Blue Nile State
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [33.5000, 10.5000],
+          [33.5000, 12.5000],
+          [35.5000, 12.5000],
+          [35.5000, 10.5000],
+          [33.5000, 10.5000]
+        ]]
+      },
+      "properties": {
+        "name": "Blue Nile Region",
+        "type": "watershed",
+        "severity": "high",
+        "description": "Blue Nile watershed monitoring area"
+      }
+    },
+    {
+      // MultiPolygon feature - Ethiopian Border Regions
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [[ // Amhara Region
+            [36.5000, 11.5000],
+            [36.5000, 13.5000],
+            [38.5000, 13.5000],
+            [38.5000, 11.5000],
+            [36.5000, 11.5000]
+          ]],
+          [[ // Tigray Region
+            [38.5000, 13.5000],
+            [38.5000, 14.5000],
+            [40.5000, 14.5000],
+            [40.5000, 13.5000],
+            [38.5000, 13.5000]
+          ]]
+        ]
+      },
+      "properties": {
+        "name": "Border Drought Regions",
+        "type": "drought_zone",
+        "severity": "critical",
+        "description": "Multiple affected areas along Ethiopian border"
+      }
+    }
+  ]
+};
+
+const MultiGeometryMap = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const popupRef = useRef(null);
-  const [error, setError] = useState(null);
 
-  const cycloneData = {
-    type: "FeatureCollection",  // Changed to FeatureCollection
-    features: [
-      {
-        type: "Feature",  // Added type: "Feature" to each feature
-        properties: {
-          eventtype: "TC",
-          eventid: 1001123,
-          eventname: "VAYU-24",
-          name: "Tropical Cyclone VAYU-24",
-          alertlevel: "Red",
-          country: "India",
-          fromdate: "2024-11-05T06:00:00",
-          todate: "2024-11-10T12:00:00",
-          severitydata: JSON.stringify({
-            severity: 180.23,
-            severitytext: "Severe Cyclonic Storm (maximum wind speed of 180 km/h)",
-            severityunit: "km/h"
-          })
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [72.5, 20.1],
-            [72.6, 20.3],
-            [72.7, 20.5],
-            [72.8, 20.7],
-            [72.9, 20.9],
-            [73.0, 21.1],
-            [73.1, 21.3],
-            [73.2, 21.5],
-            [73.3, 21.7],
-            [73.4, 21.9],
-            [73.5, 22.1],
-            [73.6, 22.3],
-            [72.5, 20.1]
-          ]]
-        }
-      },
-      {
-        type: "Feature",
-        properties: {
-          eventtype: "TC",
-          eventid: 1001124,
-          eventname: "MAHA-24",
-          name: "Tropical Cyclone MAHA-24",
-          alertlevel: "Orange",
-          country: "India",
-          fromdate: "2024-11-08T08:00:00",
-          todate: "2024-11-12T16:00:00",
-          severitydata: JSON.stringify({
-            severity: 160.75,
-            severitytext: "Cyclonic Storm (maximum wind speed of 160 km/h)",
-            severityunit: "km/h"
-          })
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [-67.13734, 45.13745],
-            [-66.96466, 44.8097],
-            [-68.03252, 44.3252],
-            [-69.06, 43.98],
-            [-70.11617, 43.68405],
-            [-70.64573, 43.09008],
-            [-70.75102, 43.08003],
-            [-70.79761, 43.21973],
-            [-70.98176, 43.36789],
-            [-70.94416, 43.46633],
-            [-71.08482, 45.30524],
-            [-70.66002, 45.46022],
-            [-70.30495, 45.91479],
-            [-70.00014, 46.69317],
-            [-69.23708, 47.44777],
-            [-68.90478, 47.18479],
-            [-68.2343, 47.35462],
-            [-67.79035, 47.06624],
-            [-67.79141, 45.70258],
-            [-67.13734, 45.13745] 
-          ]]
-        }
-      },
-      {
-        type: "Feature",
-        properties: {
-          eventtype: "TC",
-          eventid: 1001125,
-          eventname: "NISHA-24",
-          name: "Tropical Cyclone NISHA-24",
-          alertlevel: "Yellow",
-          country: "India",
-          fromdate: "2024-11-09T10:00:00",
-          todate: "2024-11-13T18:00:00",
-          severitydata: JSON.stringify({
-            severity: 140.5,
-            severitytext: "Cyclonic Storm (maximum wind speed of 140 km/h)",
-            severityunit: "km/h"
-          })
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [88.1, 21.9],
-            [88.2, 22.1],
-            [88.3, 22.3],
-            [88.4, 22.5],
-            [88.5, 22.7],
-            [88.6, 22.9],
-            [88.7, 23.1],
-            [88.8, 23.3],
-            [88.9, 23.5],
-            [88.1, 21.9]
-          ]]
-        }
-      },
-      {
-        type: "Feature",
-        properties: {
-          eventtype: "TC",
-          eventid: 1001126,
-          eventname: "PHET-24",
-          name: "Tropical Cyclone PHET-24",
-          alertlevel: "Orange",
-          country: "India",
-          fromdate: "2024-11-04T04:00:00",
-          todate: "2024-11-08T10:00:00",
-          severitydata: JSON.stringify({
-            severity: 170.0,
-            severitytext: "Cyclonic Storm (maximum wind speed of 170 km/h)",
-            severityunit: "km/h"
-          })
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [77.3, 15.5],
-            [77.4, 15.7],
-            [77.5, 15.9],
-            [77.6, 16.1],
-            [77.7, 16.3],
-            [77.8, 16.5],
-            [77.9, 16.7],
-            [78.0, 16.9],
-            [78.1, 17.1],
-            [77.3, 15.5]
-          ]]
-        }
-      },
-      {
-        type: "Feature",
-        properties: {
-          eventtype: "TC",
-          eventid: 1001127,
-          eventname: "BULBUL-24",
-          name: "Tropical Cyclone BULBUL-24",
-          alertlevel: "Red",
-          country: "India",
-          fromdate: "2024-11-07T02:00:00",
-          todate: "2024-11-14T08:00:00",
-          severitydata: JSON.stringify({
-            severity: 190.85,
-            severitytext: "Very Severe Cyclonic Storm (maximum wind speed of 190 km/h)",
-            severityunit: "km/h"
-          })
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [93.5, 12.1],
-            [93.6, 12.3],
-            [93.7, 12.5],
-            [93.8, 12.7],
-            [93.9, 12.9],
-            [94.0, 13.1],
-            [94.1, 13.3],
-            [94.2, 13.5],
-            [94.3, 13.7],
-            [94.4, 13.9],
-            [94.5, 14.1],
-            [93.5, 12.1]
-          ]]
-        }
-      }
-    ]
+  // Color mapping based on severity
+  const getSeverityColor = (severity) => {
+    const colors = {
+      low: '#4CAF50',      // Green
+      medium: '#FFA726',   // Orange
+      high: '#EF5350',     // Red
+      critical: '#B71C1C'  // Dark Red
+    };
+    return colors[severity] || '#4CAF50';
   };
 
   useEffect(() => {
-    try {
-      if (!mapRef.current) {
-        console.log('Initializing map...');
-        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-
-        mapRef.current = new mapboxgl.Map({
-          container: mapContainerRef.current,
-          style: 'mapbox://styles/mapbox/streets-v12',
-          center: [83, 21], // Centered on India
-          zoom: 4.5 // Adjusted zoom level to show all of India
-        });
-
-        // Create popup but don't add to map yet
-        popupRef.current = new mapboxgl.Popup({
-          closeButton: true,
-          closeOnClick: false
-        });
-
-        // Wait for map to load before adding data
-        mapRef.current.on('load', () => {
-          console.log('Map loaded, adding source and layers...');
-
-          // First check if source already exists
-          if (!mapRef.current.getSource('cyclone')) {
-            // Add the cyclone data source
-            mapRef.current.addSource('cyclone', {
-              type: 'geojson',
-              data: cycloneData
-            });
-            console.log('Source added');
-          }
-
-          // Check if layer exists before adding
-          if (!mapRef.current.getLayer('cyclone-area')) {
-            // Add the fill layer with color based on alert level
-            mapRef.current.addLayer({
-              id: 'cyclone-area',
-              type: 'fill',
-              source: 'cyclone',
-              paint: {
-                'fill-color': [
-                  'match',
-                  ['get', 'alertlevel'],
-                  'Red', '#FF0000',
-                  'Orange', '#FFA500',
-                  'Yellow', '#FFFF00',
-                  '#FFA500' // default color
-                ],
-                'fill-opacity': 0.5
-              }
-            });
-            console.log('Fill layer added');
-
-            // Add the outline layer
-            mapRef.current.addLayer({
-              id: 'cyclone-outline',
-              type: 'line',
-              source: 'cyclone',
-              paint: {
-                'line-color': '#000',
-                'line-width': 2
-              }
-            });
-            console.log('Outline layer added');
-          }
-
-          // Add click handler
-          mapRef.current.on('click', 'cyclone-area', (e) => {
-            const coordinates = e.lngLat;
-            const properties = e.features[0].properties;
-            const severityData = JSON.parse(properties.severitydata);
-
-            const html = `
-              <div class="p-4 max-w-sm">
-                <h3 class="text-lg font-bold mb-2">${properties.name}</h3>
-                <div class="space-y-2">
-                  <p><strong>Alert Level:</strong> ${properties.alertlevel}</p>
-                  <p><strong>Location:</strong> ${properties.country}</p>
-                  <p><strong>Period:</strong><br/>
-                     From: ${new Date(properties.fromdate).toLocaleString()}<br/>
-                     To: ${new Date(properties.todate).toLocaleString()}</p>
-                  <p><strong>Severity:</strong> ${severityData.severitytext}</p>
-                </div>
-              </div>
-            `;
-
-            popupRef.current
-              .setLngLat(coordinates)
-              .setHTML(html)
-              .addTo(mapRef.current);
-          });
-
-          // Add hover effects
-          mapRef.current.on('mouseenter', 'cyclone-area', () => {
-            mapRef.current.getCanvas().style.cursor = 'pointer';
-          });
-
-          mapRef.current.on('mouseleave', 'cyclone-area', () => {
-            mapRef.current.getCanvas().style.cursor = '';
-          });
-        });
-
-        // Add error handling
-        mapRef.current.on('error', (e) => {
-          console.error('Mapbox error:', e);
-          setError('An error occurred while loading the map.');
-        });
-      }
-    } catch (err) {
-      console.error('Error initializing map:', err);
-      setError('Failed to initialize the map.');
+    if (!mapboxgl.accessToken) {
+      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
     }
+
+    if (!mapboxgl.accessToken) {
+      console.error('Mapbox access token is missing!');
+      return;
+    }
+
+    if (mapRef.current) return;
+
+    // Initialize map with a center point that shows all features
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [32, 13], // Centered to show all features
+      zoom: 4.5 // Zoomed out to show the whole region
+    });
+
+    mapRef.current.on('load', () => {
+      // Add data source
+      mapRef.current.addSource('geographic-data', {
+        type: 'geojson',
+        data: geographicData
+      });
+
+      // Points Layer
+      mapRef.current.addLayer({
+        id: 'point-layer',
+        type: 'circle',
+        source: 'geographic-data',
+        filter: ['==', ['geometry-type'], 'Point'],
+        paint: {
+          'circle-radius': 8,
+          'circle-color': ['get', 'color'],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff'
+        }
+      });
+
+      // Add text labels for points
+      mapRef.current.addLayer({
+        id: 'point-labels',
+        type: 'symbol',
+        source: 'geographic-data',
+        filter: ['==', ['geometry-type'], 'Point'],
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-offset': [0, 1.5],
+          'text-anchor': 'top'
+        },
+        paint: {
+          'text-color': '#000',
+          'text-halo-color': '#fff',
+          'text-halo-width': 1
+        }
+      });
+
+      // Polygon Layer
+      mapRef.current.addLayer({
+        id: 'polygon-layer',
+        type: 'fill',
+        source: 'geographic-data',
+        filter: ['==', ['geometry-type'], 'Polygon'],
+        paint: {
+          'fill-color': ['get', 'color'],
+          'fill-opacity': 0.5
+        }
+      });
+
+      // Polygon Outline
+      mapRef.current.addLayer({
+        id: 'polygon-outline',
+        type: 'line',
+        source: 'geographic-data',
+        filter: ['==', ['geometry-type'], 'Polygon'],
+        paint: {
+          'line-color': ['get', 'color'],
+          'line-width': 2
+        }
+      });
+
+      // MultiPolygon Layer
+      mapRef.current.addLayer({
+        id: 'multipolygon-layer',
+        type: 'fill',
+        source: 'geographic-data',
+        filter: ['==', ['geometry-type'], 'MultiPolygon'],
+        paint: {
+          'fill-color': ['get', 'color'],
+          'fill-opacity': 0.5
+        }
+      });
+
+      // MultiPolygon Outline
+      mapRef.current.addLayer({
+        id: 'multipolygon-outline',
+        type: 'line',
+        source: 'geographic-data',
+        filter: ['==', ['geometry-type'], 'MultiPolygon'],
+        paint: {
+          'line-color': ['get', 'color'],
+          'line-width': 2
+        }
+      });
+
+      // Add popups for all layers
+      const layerIds = ['point-layer', 'polygon-layer', 'multipolygon-layer'];
+      
+      layerIds.forEach(layerId => {
+        mapRef.current.on('click', layerId, (e) => {
+          if (!e.features[0].properties) return;
+
+          const coordinates = e.lngLat;
+          const properties = e.features[0].properties;
+
+          const popupContent = `
+            <div class="feature-popup">
+              <h3>${properties.name}</h3>
+              <p><strong>Type:</strong> ${properties.type}</p>
+              <p><strong>Severity:</strong> ${properties.severity}</p>
+              <p><strong>Description:</strong> ${properties.description}</p>
+            </div>
+          `;
+
+          if (!popupRef.current) {
+            popupRef.current = new mapboxgl.Popup({
+              closeButton: true,
+              closeOnClick: false
+            });
+          }
+
+          popupRef.current
+            .setLngLat(coordinates)
+            .setHTML(popupContent)
+            .addTo(mapRef.current);
+        });
+
+        // Hover effects
+        mapRef.current.on('mouseenter', layerId, () => {
+          mapRef.current.getCanvas().style.cursor = 'pointer';
+        });
+
+        mapRef.current.on('mouseleave', layerId, () => {
+          mapRef.current.getCanvas().style.cursor = '';
+        });
+      });
+
+      // Add navigation controls
+      mapRef.current.addControl(new mapboxgl.NavigationControl());
+
+      // Process features to add color property
+      const processedData = {
+        ...geographicData,
+        features: geographicData.features.map(feature => ({
+          ...feature,
+          properties: {
+            ...feature.properties,
+            color: getSeverityColor(feature.properties.severity)
+          }
+        }))
+      };
+
+      // Update the source with processed data
+      mapRef.current.getSource('geographic-data').setData(processedData);
+    });
 
     return () => {
       if (mapRef.current) {
@@ -721,27 +1270,20 @@ const MapboxCycloneTracker = () => {
     };
   }, []);
 
-  const containerStyle = {
-    position: 'relative',
-    width: '100%',
-    height: '600px',
-    border: '1px solid #ccc'
-  };
-
   return (
-    <div className="w-full">
-      {error && (
-        <div className="p-4 mb-4 bg-red-100 border border-red-400 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-      <div 
-        ref={mapContainerRef} 
-        style={containerStyle}
-        className="relative bg-gray-100"
-      />
-    </div>
+    <div 
+      id="map" 
+      ref={mapContainerRef} 
+      style={{ 
+        height: '600px',
+        width: '100%',
+        position: 'relative'
+      }} 
+    />
   );
 };
 
-export default MapboxCycloneTracker;
+export default MultiGeometryMap;
+
+
+
