@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { ThemeProvider } from "./components/ThemeProvider";
-import "./App.css";
 import { Outlet } from "react-router-dom";
 import Mapbox from "./components/map/Map";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { ChatBot } from "./components/Chatbot";
 import { ClerkProvider, useAuth, useUser } from "@clerk/clerk-react";
 import { useDispatch } from "react-redux";
 import { setAuthStatus, setUserDetails } from "./store/slices/userSlice";
@@ -59,10 +59,13 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <AuthStatusManager />
-      <Header />
-      <Outlet />
-      <Footer />
+      <div className="min-h-screen flex flex-col w-screen">
+        <ChatBot />
+        <AuthStatusManager />
+        <Header />
+        <Outlet />
+        <Footer />
+      </div>
     </ThemeProvider>
   );
 }

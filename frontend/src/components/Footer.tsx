@@ -1,99 +1,53 @@
 import Image from '../../public/Logo.avif'
 
 const navigation = {
-  connect: [
-    { name: 'Book Meeting', href: '' },
+  social: [
     {
       name: 'Twitter',
-      href: 'https://twitter.com/justansub',
+      href: 'https://twitter.com',
     },
     {
       name: 'Github',
-      href: 'https://www.youtube.com/@SpeedyBrand-SEO',
+      href: 'https://github.com',
     },
     {
       name: 'LinkedIn',
-      href: 'https://www.linkedin.com/company/speedy-brand-inc/',
+      href: 'https://linkedin.com',
     },
-  ],
-  company: [
-    { name: 'Blogs', href: '/' },
-    { name: 'Pricing', href: '/' },
-    { name: 'Affiliate Partner', href: '/' },
-    { name: 'AI For Enterprise', href: '/' },
   ],
 }
 
-const TwoColumnFooter = () => {
+const MinimalFooter = () => {
   return (
-    <footer
-      aria-labelledby="footer-heading"
-      className="font-inter w-full max-w-7xl"
-    >
-      <h2 id="footer-heading" className="sr-only">
-        Footer
-      </h2>
-      <div className="mx-auto max-w-7xl px-2">
-        <div className="flex flex-col justify-between lg:flex-row">
-          <div className="space-y-8">
-            <img src={Image} alt="logo" className="h-7 w-auto" />
-            <p className="text-md max-w-xs leading-6 text-slate-700 dark:text-slate-200">
-              Not your average component library - build faster, launch sooner.
-            </p>
-            <div className="flex space-x-6 text-sm text-slate-700 dark:text-slate-200">
-              <div>Made with ❤️ In India.</div>
-            </div>
-          </div>
-          {/* Navigations */}
-          <div className="mt-16 grid grid-cols-2 gap-14 md:grid-cols-2 lg:mt-0 xl:col-span-2">
-            <div className="md:mt-0">
-              <h3 className="text-sm font-semibold leading-6 text-slate-900 dark:text-slate-100">
-                Connect
-              </h3>
-              <div className="mt-6 space-y-4">
-                {navigation.connect.map((item) => (
-                  <div key={item.name}>
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm leading-6 text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
-                    >
-                      {item.name}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div>
-                <h3 className="text-sm font-semibold leading-6 text-slate-900 dark:text-slate-100">
-                  Company
-                </h3>
-                <div className="mt-6 space-y-4">
-                  {navigation.company.map((item) => (
-                    <div key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm leading-6 text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
-                      >
-                        {item.name}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+    <footer className="w-full max-w-7xl mx-auto px-4 py-8 border-t border-slate-900/10 dark:border-slate-100/10">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="flex items-center gap-2">
+          <img src={Image} alt="DisasterBusters" className="h-6 w-auto" />
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+            DisasterBusters
+          </span>
         </div>
-        <div className="mt-16 border-t border-slate-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-slate-100/10">
-          <p className="text-xs leading-5 text-slate-700 dark:text-slate-200">
-            &copy; 2024 SyntaxUI. All rights reserved.
-          </p>
+
+        <div className="flex items-center gap-6">
+          {navigation.social.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
+
+        <div className="text-sm text-slate-600 dark:text-slate-400">
+          Made with ❤️ by DisasterBusters
         </div>
       </div>
     </footer>
   )
 }
 
-export default TwoColumnFooter
+export default MinimalFooter

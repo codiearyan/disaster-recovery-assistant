@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface GDACSEvent {
   eventid: number;
@@ -40,36 +40,36 @@ const initialState: GDACSState = {
 };
 
 export const fetchGDACSEvents = createAsyncThunk(
-  'gdacs/fetchEvents',
+  "gdacs/fetchEvents",
   async () => {
-    const response = await fetch('http://127.0.0.1:8000/gdacs/events');
+    const response = await fetch("http://127.0.0.1:8000/api/gdacs/events");
     console.log(response);
     return response.json();
   }
 );
 
 export const fetchEventGeometry = createAsyncThunk(
-  'gdacs/fetchGeometry',
+  "gdacs/fetchGeometry",
   async (event: GDACSEvent) => {
     const response = await fetch(
-      `http://127.0.0.1:8000/gdacs/getgeometry?event_type=${event.eventtype}&event_id=${event.eventid}&episode_id=${event.episodeid}`
+      `http://127.0.0.1:8000/api/gdacs/getgeometry?event_type=${event.eventtype}&event_id=${event.eventid}&episode_id=${event.episodeid}`
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return {
       eventKey: `${event.eventtype}_${event.eventid}_${event.episodeid}`,
-      geometry: data
+      geometry: data,
     };
   }
 );
 
 const gdacsSlice = createSlice({
-  name: 'gdacs',
+  name: "gdacs",
   initialState,
   reducers: {
     setSelectedEvent: (state, action) => {
       state.selectedEvent = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -81,7 +81,7 @@ const gdacsSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchGDACSEvents.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to fetch events';
+        state.error = action.error.message || "Failed to fetch events";
         state.loading = false;
       })
       .addCase(fetchEventGeometry.fulfilled, (state, action) => {
