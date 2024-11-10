@@ -9,7 +9,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 const MultiGeometryMap = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -18,8 +17,8 @@ const MultiGeometryMap = () => {
 
   const { events, geometries } = useSelector((state: RootState) => state.gdacs);
   useEffect(() => {
-    console.log("events", events);
-    console.log("geometries", geometries);
+    // console.log("events", events);
+    // console.log("geometries", geometries);
   }, [events, geometries]);
   // Color mapping based on severity
   const getAlertColor = (alertLevel: string) => {
@@ -81,7 +80,7 @@ const MultiGeometryMap = () => {
       })
       .filter(Boolean); // Remove null values
 
-    console.log("Processed Features:", features); // Debug log
+    // console.log("Processed Features:", features); // Debug log
 
     return {
       type: "FeatureCollection",
@@ -110,7 +109,7 @@ const MultiGeometryMap = () => {
     const source = mapRef.current.getSource("geographic-data");
     if (source) {
       const geoJSONData = createGeoJSONData();
-      console.log("Updating map with data:", geoJSONData); // Debug log
+      // console.log("Updating map with data:", geoJSONData); // Debug log
       source.setData(geoJSONData);
     }
   }, [events, geometries]);
@@ -130,7 +129,7 @@ const MultiGeometryMap = () => {
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v12",
         center: [0, 0],
-        zoom: 1,
+        zoom: 3,
       });
 
       mapRef.current.on("load", () => {
@@ -301,9 +300,7 @@ const MultiGeometryMap = () => {
   if (!events.length || !Object.keys(geometries).length) {
     return (
       <div className="w-full flex justify-between">
-        <div className="w-[20%]">
-          <h1>News</h1>
-        </div>
+
         <div className="w-[80%] h-[500px] flex items-center justify-center">
           Loading map data...
         </div>
@@ -312,18 +309,13 @@ const MultiGeometryMap = () => {
   }
 
   return (
-    <div className="w-full flex justify-between">
-      <div className="w-[20%]">
-        <h1>News</h1>
-      </div>
       <div
         ref={mapContainerRef}
-        className="w-[80%] h-[500px] relative rounded-lg"
+        className="w-full h-[600px] relative rounded-lg"
         style={{
           position: "relative",
         }}
       />
-    </div>
   );
 };
 

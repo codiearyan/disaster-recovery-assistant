@@ -1,0 +1,21 @@
+@keyframes scroll-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+  
+  .marquee-container {
+    overflow: hidden;
+    height: 100%;
+  }
+  
+  .marquee-content {
+    animation: scroll-vertical 40s linear infinite;
+  }
+  
+  .marquee-content:hover {
+    animation-play-state: paused;
+  }
