@@ -6,7 +6,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/gdacs", tags=["GDACS"])
+router = APIRouter()
 
 
 @router.get("/events")
