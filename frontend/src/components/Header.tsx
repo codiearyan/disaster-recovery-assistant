@@ -13,11 +13,12 @@ import { TbBellOff, TbBell } from "react-icons/tb";
 import { setAlert } from "../store/slices/userSlice";
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import { Link, useLocation } from "react-router-dom";
+
 const navigation = [
-  { name: "Home", href: "/", current: false },
-  { name: "Volunteer", href: "/volunteer", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
+  { name: "Home", to: "/", current: false },
+  { name: "Volunteer", to: "/volunteer", current: false },
+  { name: "Precautions", to: "/precaution", current: false },
+  { name: "Subscribe To Alerts", to: "/alert", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -37,21 +38,20 @@ export default function Example() {
     closeSignIn,
     handleAuthSuccess,
   } = useAuthPopup();
-  const toggleAlert = async () => {
-    if (!authStatus) {
-      openSignIn();
-      return;
-    } else {
-      dispatch(setAlert(!alert));
-    }
-  };
-
   const location = useLocation();
 
   const currentNavigation = navigation.map((item) => ({
     ...item,
-    current: location.pathname === item.href,
+    current: location.pathname === item.to,
   }));
+
+  const toggleAlert = async () => {
+    if (!authStatus) {
+      openSignIn();
+      return;
+    }
+    dispatch(setAlert(!alert));
+  };
 
   return (
     <Disclosure
@@ -83,7 +83,7 @@ export default function Example() {
                 {currentNavigation.map((item) => (
                   <Link
                     key={item.name}
-                    to={item.href}
+                    to={item.to}
                     aria-current={item.current ? "page" : undefined}
                     className={classNames(
                       item.current
@@ -104,11 +104,7 @@ export default function Example() {
               onClick={toggleAlert}
               className="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-all duration-200 hover:scale-105"
             >
-              {alert ? (
-                <TbBellOff className="h-5 w-5" />
-              ) : (
-                <TbBell className="h-5 w-5" />
-              )}
+              {alert ? <TbBellOff className="h-5 w-5" /> : <TbBell className="h-5 w-5" />}
             </button>
 
             <div className="flex items-center">
@@ -129,11 +125,7 @@ export default function Example() {
                 ) : (
                   <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-gray-700 flex items-center justify-center">
                     <span className="text-sm font-medium text-blue-600 dark:text-white">
-                      {(
-                        userDetails.firstName?.[0] ||
-                        userDetails.username?.[0] ||
-                        "?"
-                      ).toUpperCase()}
+                      {(userDetails.firstName?.[0] || userDetails.username?.[0] || "?").toUpperCase()}
                     </span>
                   </div>
                 )}
@@ -148,7 +140,7 @@ export default function Example() {
           {currentNavigation.map((item) => (
             <Link
               key={item.name}
-              to={item.href}
+              to={item.to}
               className={classNames(
                 item.current
                   ? "bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-white"
@@ -165,55 +157,22 @@ export default function Example() {
       {showSignIn && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 relative">
-            <button
-              onClick={closeSignIn}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            >
+            <button onClick={closeSignIn} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
               <XMarkIcon className="h-6 w-6" />
             </button>
             {isSignUp ? (
               <SignUp
                 routing="virtual"
                 redirectUrl={window.location.href}
-                appearance={{
-                  elements: {
-                    footerActionLink: {
-                      onClick: (e) => {
-                        e.preventDefault();
-                        toggleMode();
-                      },
-                    },
-                    rootBox: {
-                      boxShadow: "none",
-                    },
-                  },
-                }}
-                afterSignUp={(data) => {
-                  handleAuthSuccess();
-                  return false; // Prevent default redirect
-                }}
+                appearance={{ elements: { footerActionLink: { onClick: (e) => e.preventDefault() }, rootBox: { boxShadow: "none" } }}}
+                afterSignUp={() => (handleAuthSuccess(), false)}
               />
             ) : (
               <SignIn
                 routing="virtual"
                 redirectUrl={window.location.href}
-                appearance={{
-                  elements: {
-                    footerActionLink: {
-                      onClick: (e) => {
-                        e.preventDefault();
-                        toggleMode();
-                      },
-                    },
-                    rootBox: {
-                      boxShadow: "none",
-                    },
-                  },
-                }}
-                afterSignIn={(data) => {
-                  handleAuthSuccess();
-                  return false; // Prevent default redirect
-                }}
+                appearance={{ elements: { footerActionLink: { onClick: (e) => e.preventDefault() }, rootBox: { boxShadow: "none" } }}}
+                afterSignIn={() => (handleAuthSuccess(), false)}
               />
             )}
           </div>
@@ -222,3 +181,4 @@ export default function Example() {
     </Disclosure>
   );
 }
+

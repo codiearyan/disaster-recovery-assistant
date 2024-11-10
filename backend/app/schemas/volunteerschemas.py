@@ -63,3 +63,8 @@ class SubscriptionCreate(BaseModel):
     disaster_events: str
     location_type: str  # "Your Location" or "Countries"
     location: str  # Actual location value
+
+class VolunteerAuth(BaseModel):
+    email: EmailStr
+    name: str
+    phone_number: str
