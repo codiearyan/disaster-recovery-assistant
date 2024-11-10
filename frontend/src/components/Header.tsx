@@ -3,11 +3,19 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { ModeToggle } from './MoonToggle'
 import Image from '../../public/Logo.avif'
 const navigation = [
+<<<<<<< Updated upstream
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Team', href: '#', current: false },
   { name: 'Projects', href: '#', current: false },
   { name: 'Calendar', href: '#', current: false },
 ]
+=======
+  { name: "Home", to: "/", current: false },
+  { name: "Volunteer", to: "/volunteer", current: false },
+  { name: "Precautions", to: "/precaution", current: false },
+  { name: "Subscribe To Alerts", to: "/alert", current: false },
+];
+>>>>>>> Stashed changes
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -38,8 +46,9 @@ export default function Example() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
+<<<<<<< Updated upstream
                     href={item.href}
                     aria-current={item.current ? 'page' : undefined}
                     className={classNames(
@@ -47,10 +56,18 @@ export default function Example() {
                         ? 'bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white' 
                         : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
                       'rounded-md px-3 py-2 text-sm font-medium'
+=======
+                    to={item.to}
+                    className={classNames(
+                      location.pathname === item.to
+                        ? "bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white border-b-2 border-blue-500"
+                        : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white",
+                      "rounded-md px-3 py-2 text-sm font-medium"
+>>>>>>> Stashed changes
                     )}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -74,19 +91,25 @@ export default function Example() {
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {navigation.map((item) => (
-            <DisclosureButton
+            <Link
               key={item.name}
-              as="a"
-              href={item.href}
+              to={item.to}
               className={classNames(
+<<<<<<< Updated upstream
                 item.current 
                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white' 
                   : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
                 'block rounded-md px-3 py-2 text-base font-medium'
+=======
+                location.pathname === item.to
+                  ? "bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white"
+                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white",
+                "block rounded-md px-3 py-2 text-base font-medium"
+>>>>>>> Stashed changes
               )}
             >
               {item.name}
-            </DisclosureButton>
+            </Link>
           ))}
         </div>
       </DisclosurePanel>
