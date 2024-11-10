@@ -92,7 +92,7 @@ function VolunteerPage() {
           <p className="text-xl mb-8">
             Join hands to make a difference in your community
           </p>
-          <MarqueeText />
+          {/* <MarqueeText /> */}
         </div>
       </section>
 
