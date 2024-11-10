@@ -1,9 +1,16 @@
 import React from 'react';
 import { Shield } from 'lucide-react';
-import { DisasterCard } from './components/DisasterCard';
-import { disasterData } from './components/DisasterData';
+import { DisasterCard } from '../components/DisasterCard'; // Correct import for DisasterCard
+import disasterData from '../components/DisasterData'; // Correct import for disaster data
 
-function App() {
+interface DisasterItem {
+  color: string;
+  precautions: string[];
+  title: string;
+  icon: React.ReactNode;
+}
+
+function Precaution() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -26,7 +33,7 @@ function App() {
           Safety Protocols for Disaster Prevention
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {disasterData.map((disaster, index) => (
+          {disasterData.map((disaster: DisasterItem, index: number) => (
             <DisasterCard
               key={index}
               title={disaster.title}
@@ -50,4 +57,4 @@ function App() {
   );
 }
 
-export default App;
+export default Precaution;
