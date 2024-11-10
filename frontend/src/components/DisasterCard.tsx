@@ -47,3 +47,5 @@ export function DisasterCard({ title, icon, precautions, color }: DisasterCardPr
     </div>
   );
 }
+
+export default DisasterCard;
