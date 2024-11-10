@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import chat_bot, volunteer
 from app.auth import ClerkAuthMiddleware
+from .routers import gdacs
+from .routers import news
 
 app = FastAPI()
 
@@ -20,6 +22,8 @@ app.add_middleware(
     ClerkAuthMiddleware,
     protected_paths=["/api/volunteer"]  # Only protect volunteer routes
 )
+app.include_router(gdacs.router)
+app.include_router(news.router)
 @app.get("/")
 async def root():
     return {"message": "API is running"}

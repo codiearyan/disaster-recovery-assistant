@@ -8,8 +8,7 @@ import logging
 import xml.etree.ElementTree as ET
 
 router = APIRouter(
-    prefix="/api/gdacs",
-    tags=["gdacs"],
+    prefix="/gdacs",
     responses={404: {"description": "Not found"}},
 )
 
