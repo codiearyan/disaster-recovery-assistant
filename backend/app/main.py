@@ -22,7 +22,7 @@ app.add_middleware(
     ClerkAuthMiddleware,
     protected_paths=["/api/volunteer"]  # Only protect volunteer routes
 )
-app.include_router(gdacs.router)
+app.include_router(gdacs.router, prefix="/api/gdacs", tags=["gdacs"])
 app.include_router(news.router, prefix="/api/news", tags=["news"])
 
 @app.get("/")
