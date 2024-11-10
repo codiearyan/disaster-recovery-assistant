@@ -27,7 +27,7 @@ load_dotenv(env_path)
 nlp = spacy.load("en_core_web_sm")
 geolocator = Nominatim(user_agent="disaster_monitor")
 
-router = APIRouter(prefix="/news", tags=["news"])
+router = APIRouter()
 
 NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 NEWS_API_BASE_URL = "https://newsapi.org/v2/everything"

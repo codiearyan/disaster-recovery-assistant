@@ -34,13 +34,12 @@ def create_volunteer_program(program: VolunteerProgramCreate):
         
         # Log the incoming data
         logger.info(f"Attempting to create program with data: {program.model_dump()}")
-        
+
         program_id = str(uuid.uuid4())
         program_data = program.model_dump()
         
         # Validate required fields
-        required_fields = ['title', 'description', 'created_by', 'email', 
-                         'phone_number', 'disaster_type', 'event_date']
+        required_fields = ['title', 'description', 'created_by', 'number_of_volunteers', 'disaster_type', 'event_date']
         for field in required_fields:
             if field not in program_data or not program_data[field]:
                 raise ValueError(f"Missing required field: {field}")
@@ -118,7 +117,7 @@ def add_program_member(member: VolunteerMemberCreate):
         member_data = member.model_dump()
         
         # Validate required fields
-        required_fields = ['name', 'email', 'phone_number', 'age', 'skills', 'availability']
+        required_fields = ['name', 'email', 'age', 'skills', 'availability']
         for field in required_fields:
             if field not in member_data or not member_data[field]:
                 raise ValueError(f"Missing required field: {field}")

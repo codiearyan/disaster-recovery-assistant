@@ -1,43 +1,28 @@
 from fastapi import FastAPI
-from app.routers import volunteer
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Dict
-from fastapi.middleware.cors import CORSMiddleware
+from app.routers import chat_bot, volunteer
+from app.auth import ClerkAuthMiddleware
 from .routers import gdacs
 from .routers import news
-import logging
-from pathlib import Path
-from dotenv import load_dotenv
-import os
 
 app = FastAPI()
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # In production, replace with your frontend URL
     allow_credentials=True,
-    allow_methods=["*"],  # Make sure PUT is allowed
+    allow_methods=["*"],
     allow_headers=["*"],
+
 )
 
-logger = logging.getLogger(__name__)
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+# Include the chat bot router with a prefix
+app.include_router(chat_bot.router, prefix="/api/chatbot", tags=["chatbot"])
 
-# Get the base directory and load .env
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-env_path = BASE_DIR / ".env"
-load_dotenv(env_path)
-
-app.include_router(volunteer.router, prefix="/api")
-app.include_router(gdacs.router)
-app.include_router(news.router)
-
+app.include_router(gdacs.router, prefix="/api/gdacs", tags=["gdacs"])
+app.include_router(news.router, prefix="/api/news", tags=["news"])
+app.include_router(volunteer.router, prefix="/api/volunteer", tags=["volunteer"])
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to the Volunteer Program API"}
+async def root():
+    return {"message": "API is running"}

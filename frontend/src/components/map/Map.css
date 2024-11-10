@@ -1,70 +1,10 @@
-.map-container {
-    height: 100vh;
-    width: 100%;
-  }
-  
-  .cyclone-marker {
-    background-color: white;
-    border-radius: 50%;
-    padding: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  
-  .cyclone-marker:hover {
-    transform: scale(1.1);
-  }
-  
-  .marker-icon {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .cyclone-popup {
-    padding: 12px;
-    max-width: 300px;
-  }
-  
-  .cyclone-popup h3 {
-    margin: 0 0 8px 0;
-    color: #333;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .cyclone-popup p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .cyclone-popup .alert {
-    font-weight: bold;
-    color: #FF9800;
-  }
-  
-  .cyclone-popup .severity {
-    color: #666;
-  }
-  
-  .map-legend {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: white;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .legend-key {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-    border-radius: 50%;
-  }
-  
-  .legend-key.green { background-color: #4CAF50; }
-  .legend-key.orange { background-color: #FF9800; }
-  .legend-key.red { background-color: #F44336; }
+.feature-popup {
+  padding: 10px;
+  width: 300px;
+}
+
+.mapboxgl-popup-close-button{
+  right:5px;
+  font-size: 1.5rem;
+  color: #000;
+}
