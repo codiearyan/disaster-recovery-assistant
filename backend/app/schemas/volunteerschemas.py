@@ -7,6 +7,8 @@ class VolunteerProgramBase(BaseModel):
     title: str
     description: str
     created_by: str
+    email: EmailStr
+
     disaster_type: str
     event_date: datetime
 
@@ -41,7 +43,6 @@ class VolunteerMemberBase(BaseModel):
     program_id: str
     name: str
     email: EmailStr
-    phone_number: str
     age: int
     skills: str
     availability: str  # e.g., "Full-time", "Weekends", etc.
@@ -59,7 +60,6 @@ class VolunteerMemberResponse(VolunteerMemberBase):
 class SubscriptionCreate(BaseModel):
     name: str
     email: EmailStr
-    phone_number: str
     disaster_events: str
     location_type: str  # "Your Location" or "Countries"
     location: str  # Actual location value
