@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import chat_bot
+from app.routers import chat_bot, volunteer
+from app.auth import ClerkAuthMiddleware
 
 app = FastAPI()
 
@@ -15,7 +16,10 @@ app.add_middleware(
 
 # Include the chat bot router with a prefix
 app.include_router(chat_bot.router, prefix="/api/chatbot", tags=["chatbot"])
-
+app.add_middleware(
+    ClerkAuthMiddleware,
+    protected_paths=["/api/volunteer"]  # Only protect volunteer routes
+)
 @app.get("/")
 async def root():
     return {"message": "API is running"}

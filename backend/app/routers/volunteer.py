@@ -25,13 +25,12 @@ def create_volunteer_program(program: VolunteerProgramCreate):
     try:
         # Log the incoming data
         logger.info(f"Attempting to create program with data: {program.model_dump()}")
-        
+
         program_id = str(uuid.uuid4())
         program_data = program.model_dump()
         
         # Validate required fields
-        required_fields = ['title', 'description', 'created_by', 'email', 
-                         'phone_number', 'disaster_type', 'event_date']
+        required_fields = ['title', 'description', 'created_by', 'number_of_volunteers', 'disaster_type', 'event_date']
         for field in required_fields:
             if field not in program_data or not program_data[field]:
                 raise ValueError(f"Missing required field: {field}")
