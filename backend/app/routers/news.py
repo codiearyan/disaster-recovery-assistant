@@ -29,7 +29,7 @@ geolocator = Nominatim(user_agent="disaster_monitor")
 
 router = APIRouter()
 
-NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
+NEWS_API_KEY = 'cd9dc71a4f484d5ca85f2bcaff25c499'
 NEWS_API_BASE_URL = "https://newsapi.org/v2/everything"
 
 # Constants

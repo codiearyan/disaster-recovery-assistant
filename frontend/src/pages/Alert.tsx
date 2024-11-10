@@ -19,11 +19,11 @@ function Alert() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-8 text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 px-6 py-8 text-white">
             <div className="flex items-center gap-3 mb-2">
               <Bell className="h-8 w-8" />
               <h1 className="text-3xl font-bold">Disaster Alert Subscription</h1>
@@ -38,7 +38,7 @@ function Alert() {
           <div className="p-6 space-y-6">
             {/* Disaster Selection */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Select Disaster Event
               </label>
               <DisasterSelect value={disasterType} onChange={setDisasterType} />
@@ -46,7 +46,7 @@ function Alert() {
 
             {/* Location Selection */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Select Disaster Event Location
               </label>
               <LocationInput
@@ -69,13 +69,13 @@ function Alert() {
             <div className="pt-4">
               <button
                 onClick={handleSubscribe}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold 
-                         py-3 px-6 rounded-lg transition-colors duration-200 ease-in-out
-                         transform hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 
+                         text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 
+                         ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 Subscribe Now
               </button>
-              <p className="mt-2 text-sm text-gray-500 text-center">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">
                 You will receive notifications about selected disasters at the specified location.
               </p>
             </div>

@@ -22,7 +22,7 @@ export default function LocationInput({ value, onChange }: LocationInputProps) {
     const fetchCountries = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/volunteer/countries`);
+        const response = await fetch(`${API_URL}/api/volunteer/countries`);
         if (!response.ok) {
           throw new Error('Failed to fetch countries');
         }

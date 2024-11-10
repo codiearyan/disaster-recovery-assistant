@@ -65,7 +65,7 @@ export function NewsMarqueeVertical() {
   if (!articles || articles.length === 0) return <div className="flex items-center justify-center h-full">No news available</div>;
 
   return (
-    <div className="relative flex h-[600px] w-[20%] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl p-4">
+    <div className="relative flex h-[600px] w-[30%] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl p-4">
       <div className="w-full h-full">
         <Marquee pauseOnHover vertical className="[--duration:40s]">
           <div className="flex flex-col gap-4 py-4">
