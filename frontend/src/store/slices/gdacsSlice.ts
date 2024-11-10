@@ -55,7 +55,7 @@ export const fetchEventGeometry = createAsyncThunk(
       `http://127.0.0.1:8000/api/gdacs/getgeometry?event_type=${event.eventtype}&event_id=${event.eventid}&episode_id=${event.episodeid}`
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return {
       eventKey: `${event.eventtype}_${event.eventid}_${event.episodeid}`,
       geometry: data,
