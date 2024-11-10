@@ -59,13 +59,13 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="App">
+      <div className="min-h-screen flex flex-col w-screen">
         <ChatBot />
+        <AuthStatusManager />
+        <Header />
+        <Outlet />
+        <Footer />
       </div>
-      <AuthStatusManager />
-      <Header />
-      <Outlet />
-      <Footer />
     </ThemeProvider>
   );
 }
