@@ -12,6 +12,7 @@ import { RootState } from "../store/store";
 import { TbBellOff, TbBell } from "react-icons/tb";
 import { setAlert } from "../store/slices/userSlice";
 import { SignIn, SignUp } from "@clerk/clerk-react";
+import { Link } from "react-router-dom";
 const navigation = [
   { name: "Home", href: "/", current: true },
   { name: "Volunteer", href: "/volunteer", current: false },
@@ -26,6 +27,7 @@ function classNames(...classes: string[]) {
 export default function Example() {
   const dispatch = useDispatch();
   const authStatus = useSelector((state: RootState) => state.user.authStatus);
+  const userDetails = useSelector((state: RootState) => state.user.userDetails);
   const alert = useSelector((state: RootState) => state.user.alert);
   const {
     openSignIn,
@@ -63,7 +65,7 @@ export default function Example() {
               />
             </DisclosureButton>
           </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div className="flex flex-1 items-center justify-start sm:items-stretch">
             <div className="flex shrink-0 items-center">
               <img alt="Your Company" src={Image} className="h-8 w-auto" />
             </div>
@@ -86,65 +88,8 @@ export default function Example() {
                 ))}
               </div>
             </div>
-            {showSignIn && (
-              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg p-4 relative">
-                  <button
-                    onClick={closeSignIn}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                  >
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
-                  {isSignUp ? (
-                    <SignUp
-                      routing="virtual"
-                      redirectUrl={window.location.href}
-                      appearance={{
-                        elements: {
-                          footerActionLink: {
-                            onClick: (e) => {
-                              e.preventDefault();
-                              toggleMode();
-                            },
-                          },
-                          rootBox: {
-                            boxShadow: "none",
-                          },
-                        },
-                      }}
-                      afterSignUp={(data) => {
-                        handleAuthSuccess();
-                        return false; // Prevent default redirect
-                      }}
-                    />
-                  ) : (
-                    <SignIn
-                      routing="virtual"
-                      redirectUrl={window.location.href}
-                      appearance={{
-                        elements: {
-                          footerActionLink: {
-                            onClick: (e) => {
-                              e.preventDefault();
-                              toggleMode();
-                            },
-                          },
-                          rootBox: {
-                            boxShadow: "none",
-                          },
-                        },
-                      }}
-                      afterSignIn={(data) => {
-                        handleAuthSuccess();
-                        return false; // Prevent default redirect
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-            )}
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={toggleAlert}
@@ -156,9 +101,23 @@ export default function Example() {
                 <TbBell aria-hidden="true" className="h-6 w-6" />
               )}
             </button>
-            <div className="flex items-center ml-2">
+            <div className="flex items-center">
               <ModeToggle />
             </div>
+            {authStatus && userDetails && (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-700 dark:text-gray-300">
+                  {userDetails.firstName || userDetails.username}
+                </span>
+                {userDetails.imageUrl && (
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src={userDetails.imageUrl}
+                    alt="Profile"
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -182,6 +141,64 @@ export default function Example() {
           ))}
         </div>
       </DisclosurePanel>
+
+      {showSignIn && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-4 relative">
+            <button
+              onClick={closeSignIn}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+            {isSignUp ? (
+              <SignUp
+                routing="virtual"
+                redirectUrl={window.location.href}
+                appearance={{
+                  elements: {
+                    footerActionLink: {
+                      onClick: (e) => {
+                        e.preventDefault();
+                        toggleMode();
+                      },
+                    },
+                    rootBox: {
+                      boxShadow: "none",
+                    },
+                  },
+                }}
+                afterSignUp={(data) => {
+                  handleAuthSuccess();
+                  return false; // Prevent default redirect
+                }}
+              />
+            ) : (
+              <SignIn
+                routing="virtual"
+                redirectUrl={window.location.href}
+                appearance={{
+                  elements: {
+                    footerActionLink: {
+                      onClick: (e) => {
+                        e.preventDefault();
+                        toggleMode();
+                      },
+                    },
+                    rootBox: {
+                      boxShadow: "none",
+                    },
+                  },
+                }}
+                afterSignIn={(data) => {
+                  handleAuthSuccess();
+                  return false; // Prevent default redirect
+                }}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </Disclosure>
   );
 }

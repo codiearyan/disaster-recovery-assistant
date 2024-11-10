@@ -7,6 +7,8 @@ import {
   SuccessModal,
   MarqueeText,
 } from "../components";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 // Sample data
 const MOCK_PROGRAMS = [
@@ -37,6 +39,7 @@ const MOCK_PROGRAMS = [
 ];
 
 function VolunteerPage() {
+  const { userDetails } = useSelector((state: RootState) => state.user);
   const [programs, setPrograms] = useState(MOCK_PROGRAMS);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -96,7 +99,9 @@ function VolunteerPage() {
       {/* Programs Section */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold dark:text-white">Hi, Username</h2>
+          <h2 className="text-2xl font-bold dark:text-white">
+            Hi, {userDetails?.firstName || userDetails?.username}
+          </h2>
           <button
             onClick={() => setShowCreateModal(true)}
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
