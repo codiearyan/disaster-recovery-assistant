@@ -7,13 +7,11 @@ class VolunteerProgramBase(BaseModel):
     title: str
     description: str
     created_by: str
-    email: EmailStr
-    phone_number: str
     disaster_type: str
     event_date: datetime
 
 class VolunteerProgramCreate(VolunteerProgramBase):
-    pass
+    number_of_volunteers: int
 
 # Response schema for a volunteer program
 class VolunteerProgramResponse(VolunteerProgramBase):
