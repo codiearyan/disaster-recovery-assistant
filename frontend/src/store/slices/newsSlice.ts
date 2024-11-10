@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 
 // Define the type for a single news article
 interface NewsArticle {
@@ -30,7 +29,6 @@ interface NewsState {
   totalResults: number;
 }
 
-// Initial state
 const initialState: NewsState = {
   articles: [],
   loading: false,
@@ -38,24 +36,47 @@ const initialState: NewsState = {
   totalResults: 0
 };
 
-// Create async thunk for fetching news
+// Improved error handling in fetchNews
 export const fetchNews = createAsyncThunk(
   'news/fetchNews',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get<NewsResponse>('http://127.0.0.1:8000/api/news/headlines');
-      return response.data;
+      const response = await fetch('http://127.0.0.1:8000/api/news/headlines');
+     
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data: NewsResponse = await response.json();
+      console.log("API Response:", data);
+      
+      // Validate response data
+      if (!data || !data.articles) {
+        throw new Error('Invalid response format');
+      }
+      
+      return data;
     } catch (error) {
-      return rejectWithValue('Failed to fetch news');
+      console.error("API Error:", error);
+      return rejectWithValue(
+        error instanceof Error ? error.message : 'Failed to fetch news'
+      );
     }
   }
 );
 
-// Create the slice
 const newsSlice = createSlice({
   name: 'news',
   initialState,
-  reducers: {},
+  reducers: {
+    // Add a reset action
+    resetNews: (state) => {
+      state.articles = [];
+      state.loading = false;
+      state.error = null;
+      state.totalResults = 0;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchNews.pending, (state) => {
@@ -66,12 +87,21 @@ const newsSlice = createSlice({
         state.loading = false;
         state.articles = action.payload.articles;
         state.totalResults = action.payload.totalResults;
+        state.error = null; // Clear any previous errors
       })
       .addCase(fetchNews.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+        state.articles = []; // Clear articles on error
       });
   },
 });
 
+// Export actions
+export const { resetNews } = newsSlice.actions;
+
+// Export selectors
+export const selectNews = (state: { news: NewsState }) => state.news;
+
+// Export reducer
 export default newsSlice.reducer;
