@@ -7,7 +7,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { PUBLISHABLE_KEY } from "../constants.ts";
-import { VolunteerPage, Home } from "./pages";
+import { VolunteerPage, Home, AccountPage } from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/volunteer",
         element: <VolunteerPage />,
+      },
+      {
+        path: "/account",
+        element: <AccountPage />,
       },
     ],
   },
